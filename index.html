@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Autorización de Descuento - RAMO</title>
+    <link rel="stylesheet" href="estilos-descuento.css">
+</head>
+<body>
+
+    <div class="contenedor-principal">
+        <div class="header-logo">
+            <img src="logo-ramo.png" alt="Logo Ramo" class="logo-img">
+        </div>
+
+        <div class="header-azul">
+            <h1>AUTORIZACIÓN DE DESCUENTO</h1>
+        </div>
+
+        <form id="formulario-descuento">
+            
+            <div class="seccion-header"><span class="numero">1</span> Validación de Identidad</div>
+            <div class="input-group">
+                <label for="cedula">Número de Cédula:</label>
+                <div class="input-group-search">
+                    <input type="text" id="cedula" placeholder="Sin puntos ni comas" required>
+                    <button type="button" onclick="buscarColaborador()" class="btn-search">🔍 Buscar</button>
+                </div>
+                <div id="msg-colaborador" class="mensaje-validacion"></div>
+            </div>
+
+            <div class="seccion-header"><span class="numero">2</span> Lectura del Documento</div>
+            
+            <div class="documento-legal">
+                <h2 class="titulo-acta">AUTORIZACIÓN DE DESCUENTO POR NÓMINA</h2>
+                
+                <input type="hidden" id="nombre_colaborador" name="nombre_colaborador">
+
+                <p>Yo, <strong id="txt_nombre" class="dato-resaltado espacio-blanco espacio-largo"></strong>, identificado(a) con cédula de ciudadanía No. <strong id="txt_cedula" class="dato-resaltado espacio-blanco"></strong> autorizo al área de nómina de <strong>PRODUCTOS RAMO S.A.S.</strong></p>
+                
+                <p>a descontar de mi salario la suma de: <strong>$</strong> <span class="espacio-blanco"></span> por concepto de: <span class="espacio-blanco espacio-largo"></span></p>
+                
+                <p>El descuento, las retenciones, deducciones o compensaciones se realizarán de acuerdo con las disposiciones contenidas en el Código Sustantivo de Trabajo. De igual forma, si al finalizar la relación laboral por cualquier motivo, existen saldos pendientes de pago por este concepto, autorizo desde ya expresamente al EMPLEADOR a realizar el descuento de mi salario y/o de la liquidación final de contrato.</p>
+                
+                <p>Este documento producirá todos los efectos de título valor, por contener una obligación clara, expresa y actualmente exigible, conforme a lo señalado en los artículos 619 y siguientes del Código de Comercio.</p>
+                
+                <p>Se firma en la ciudad de Bogotá a los <strong id="txt_dia">__</strong> días del mes de <strong id="txt_mes">____</strong> de <strong id="txt_anio">____</strong>.</p>
+            </div>
+
+            <div class="cajas-internas">
+                <div class="input-group">
+                    <label>Código RAMO / SAP (Diligenciar):</label>
+                    <input type="text" id="codigo_sap" name="codigo_sap" required placeholder="Escriba el código SAP">
+                </div>
+                <div class="input-group">
+                    <label>Serial del Equipo:</label>
+                    <input type="text" id="serial_equipo" name="serial_equipo" required placeholder="SN">
+                </div>
+            </div>
+
+            <div class="seccion-header"><span class="numero">3</span> Firma Digital</div>
+            
+            <div class="canvas-container">
+                <canvas id="canvas_colaborador"></canvas>
+                <button type="button" class="btn-clear" onclick="limpiarFirma()">Borrar y reintentar firma</button>
+            </div>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="acepto" required>
+                <label for="acepto">Confirmo que he leído la totalidad del documento y acepto firmar esta autorización de descuento en blanco para el dispositivo asignado.</label>
+            </div>
+
+            <button type="submit" class="btn-principal">ENVIAR AUTORIZACIÓN DIGITAL</button>
+            <div id="estado-envio" class="mensaje-final"></div>
+
+        </form>
+    </div>
+
+    <script src="script-descuento.js"></script>
+</body>
+</html>
