@@ -1,6 +1,6 @@
 # Autorización Digital de Descuento
 
-Aplicación web desarrollada para digitalizar el proceso de autorización de descuentos asociados a dispositivos corporativos.
+Aplicación web orientada a digitalizar el proceso de autorización de descuentos asociados a dispositivos corporativos, integrando validación de colaboradores, datos del equipo, firma digital y automatización.
 
 ## Objetivo
 
@@ -11,8 +11,8 @@ Reducir el uso de formatos manuales mediante un flujo digital que permita valida
 - Búsqueda de colaboradores por número de cédula.
 - Autocompletado del nombre del colaborador.
 - Captura de código SAP.
-- Captura o recepción automática del serial del equipo mediante parámetros URL.
-- Fecha automática para Colombia.
+- Captura o recepción automática del serial mediante parámetros URL.
+- Fecha automática con zona horaria de Colombia.
 - Firma digital mediante Canvas API.
 - Validación de campos obligatorios.
 - Sanitización básica de entradas.
@@ -33,8 +33,28 @@ Reducir el uso de formatos manuales mediante un flujo digital que permita valida
 
 - `index.html`: formulario y documento de autorización.
 - `estilos-descuento.css`: estilos de la interfaz.
-- `script-descuento.js`: validaciones, firma digital e integraciones.
+- `script-descuento.js`: validaciones, firma digital e integración.
+- `config.example.js`: ejemplo de configuración sin credenciales reales.
+- `config.js`: configuración local o de despliegue; está excluida de Git.
+- `SECURITY.md`: recomendaciones de seguridad del proyecto.
 - `logo-ramo.png`: recurso gráfico utilizado por la interfaz.
+
+## Configuración
+
+El repositorio no almacena endpoints firmados de Power Automate en el código público actual.
+
+1. Copia `config.example.js` como `config.js`.
+2. Define en `config.js` los endpoints correspondientes al entorno donde se ejecute la aplicación.
+3. No subas `config.js` al repositorio.
+
+Ejemplo conceptual:
+
+```js
+window.APP_CONFIG = {
+  URL_BUSQUEDA: "ENDPOINT_DEL_ENTORNO",
+  URL_ENVIO: "ENDPOINT_DEL_ENTORNO"
+};
+```
 
 ## Flujo general
 
@@ -47,22 +67,24 @@ Reducir el uso de formatos manuales mediante un flujo digital que permita valida
 
 ## Seguridad
 
-> **Importante:** las URLs firmadas o tokens de servicios externos no deben almacenarse directamente en repositorios públicos.
+Las URLs firmadas, tokens y credenciales de servicios externos no deben almacenarse directamente en repositorios públicos.
 
-Las credenciales o URLs de Power Automate utilizadas durante el desarrollo deben considerarse información sensible. Para un despliegue seguro se recomienda:
+La versión actual utiliza configuración separada del código fuente. Si una credencial o URL firmada fue publicada anteriormente, debe considerarse comprometida y rotarse en el servicio correspondiente, incluso si ya fue retirada del código actual.
 
-- Revocar o regenerar cualquier URL firmada que haya sido publicada.
-- Evitar guardar secretos directamente en archivos JavaScript públicos.
-- Utilizar una capa backend o un servicio intermediario para proteger credenciales.
-- Limitar permisos y validar todas las solicitudes en el servicio receptor.
+Para despliegues reales se recomienda además utilizar una capa backend o intermediaria cuando sea necesario proteger secretos que no deben llegar al navegador.
 
-## Valor del proyecto
+## Qué demuestra este proyecto
 
-Este proyecto demuestra automatización de un proceso empresarial real combinando desarrollo web, validación de información, firma digital e integración con servicios de Microsoft Power Platform.
+- Automatización de un proceso empresarial real.
+- Integración entre frontend y servicios externos.
+- Manejo de formularios y validaciones.
+- Firma digital en navegador.
+- Uso de APIs HTTP y JSON.
+- Consideraciones de seguridad y separación de configuración.
 
 ## Estado
 
-Proyecto funcional de práctica aplicada. Antes de utilizarlo en producción se debe completar la separación segura de las credenciales de integración.
+Proyecto funcional y documentado para portafolio. Los endpoints reales deben configurarse únicamente en el entorno autorizado y las credenciales históricamente expuestas deben rotarse.
 
 ## Autor
 
