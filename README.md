@@ -37,6 +37,7 @@ Reducir el uso de formatos manuales mediante un flujo digital que permita valida
 - `config.example.js`: ejemplo de configuración sin credenciales reales.
 - `config.js`: configuración local o de despliegue; está excluida de Git.
 - `SECURITY.md`: recomendaciones de seguridad del proyecto.
+- `docs/capturas/`: espacio preparado para evidencias visuales.
 - `logo-ramo.png`: recurso gráfico utilizado por la interfaz.
 
 ## Configuración
@@ -81,6 +82,10 @@ Para despliegues reales se recomienda además utilizar una capa backend o interm
 - Firma digital en navegador.
 - Uso de APIs HTTP y JSON.
 - Consideraciones de seguridad y separación de configuración.
+
+## Capturas
+
+La guía de evidencias visuales recomendadas está disponible en [`docs/capturas/`](docs/capturas/README.md). Las imágenes deben utilizar información ficticia o anonimizada.
 
 ## Estado
 
