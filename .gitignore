@@ -9,6 +9,7 @@ Thumbs.db
 # Configuración y secretos locales
 .env
 .env.*
+config.js
 config.local.js
 secrets.*
 
