@@ -1,7 +1,7 @@
 // URLS DE TUS FLUJOS DE POWER AUTOMATE
-const URL_BUSQUEDA = "https://defaultaf5eb6a454944a9ea659b79c92301b.8e.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/aed1a8e6527c409fa89020e534c2b5c5/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=eO1cDqSsJme9vmuEXbqUEC0sZqHjRmJHA_a0_nqgH1U";
+const URL_BUSQUEDA = "https://defaultaf5eb6a454944a9ea659b79.8e.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/aed1a8e6527c409fa89020e534c2b5c5/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=eO1cDqSsJme9vmuEXbqUEC0sZqHjRmJHA_a0_nqgH1U";
 
-const URL_ENVIO = "https://defaultaf5eb6a454944a9ea659b79c92301b.8e.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/83f64e1aa4d1493784bcf3cdfda6ebfd/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8eILHCINj0kUPRFCyeU5giWFrLJ2KTqKL6ndpF3AiUo"; 
+const URL_ENVIO = "https://defaultaf5eb6a454944a9ea659b.8e.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/83f64e1aa4d1493784bcf3cdfda6ebfd/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8eILHCINj0kUPRFCyeU5giWFrLJ2KTqKL6ndpF3AiUo"; 
 
 let sigColab;
 let enviandoFormulario = false;
