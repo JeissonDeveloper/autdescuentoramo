@@ -1,221 +1,221 @@
-// Configuración externa. Copia config.example.js como config.js y define allí los endpoints.
-const URL_BUSQUEDA = window.APP_CONFIG?.URL_BUSQUEDA || "";
-const URL_ENVIO = window.APP_CONFIG?.URL_ENVIO || "";
-
-let sigColab;
-let enviandoFormulario = false;
+// Autorización Digital de Descuento
+// Lógica de validación, búsqueda de colaborador, firma digital e integración con Power Automate.
+// Usa datos ficticios: no representa la configuración ni los datos de ningún cliente real.
 
 document.addEventListener("DOMContentLoaded", () => {
-    sigColab = setupCanvas("canvas_colaborador");
-    ponerFechaActualColombia();
+  const form = document.getElementById("formAutorizacion");
+  const inputIdentificacion = document.getElementById("identificacion");
+  const inputNombre = document.getElementById("nombre");
+  const inputCodigoActivo = document.getElementById("codigoActivo");
+  const inputSerial = document.getElementById("serial");
+  const inputFecha = document.getElementById("fecha");
+  const btnBuscar = document.getElementById("btnBuscar");
+  const btnLimpiarFirma = document.getElementById("btnLimpiarFirma");
+  const btnEnviar = document.getElementById("btnEnviar");
+  const canvas = document.getElementById("firmaCanvas");
+  const ctx = canvas.getContext("2d");
+  const mensajeError = document.getElementById("mensajeError");
+  const mensajeExito = document.getElementById("mensajeExito");
 
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("serial")) {
-        document.getElementById("serial_equipo").value = sanitizeInput(params.get("serial"));
+  let dibujando = false;
+  let firmaVacia = true;
+
+  // ---------- Fecha automática (zona horaria Colombia) ----------
+  function establecerFechaActual() {
+    const fecha = new Date().toLocaleString("es-CO", {
+      timeZone: "America/Bogota",
+    });
+    inputFecha.value = fecha;
+  }
+  establecerFechaActual();
+
+  // ---------- Serial por parámetro de URL (opcional) ----------
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("serial")) {
+    inputSerial.value = params.get("serial");
+  }
+
+  // ---------- Firma digital (Canvas API) ----------
+  function obtenerPosicion(evento) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = evento.touches ? evento.touches[0].clientX : evento.clientX;
+    const clientY = evento.touches ? evento.touches[0].clientY : evento.clientY;
+    return {
+      x: (clientX - rect.left) * (canvas.width / rect.width),
+      y: (clientY - rect.top) * (canvas.height / rect.height),
+    };
+  }
+
+  function iniciarTrazo(evento) {
+    dibujando = true;
+    firmaVacia = false;
+    const { x, y } = obtenerPosicion(evento);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  }
+
+  function dibujarTrazo(evento) {
+    if (!dibujando) return;
+    const { x, y } = obtenerPosicion(evento);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = "#1c1c1c";
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.stroke();
+    evento.preventDefault();
+  }
+
+  function finalizarTrazo() {
+    dibujando = false;
+  }
+
+  canvas.addEventListener("mousedown", iniciarTrazo);
+  canvas.addEventListener("mousemove", dibujarTrazo);
+  canvas.addEventListener("mouseup", finalizarTrazo);
+  canvas.addEventListener("mouseleave", finalizarTrazo);
+  canvas.addEventListener("touchstart", iniciarTrazo, { passive: false });
+  canvas.addEventListener("touchmove", dibujarTrazo, { passive: false });
+  canvas.addEventListener("touchend", finalizarTrazo);
+
+  btnLimpiarFirma.addEventListener("click", () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    firmaVacia = true;
+  });
+
+  // ---------- Búsqueda de colaborador (servicio externo) ----------
+  btnBuscar.addEventListener("click", async () => {
+    ocultarMensajes();
+    const identificacion = inputIdentificacion.value.trim();
+
+    if (!/^\d{6,12}$/.test(identificacion)) {
+      mostrarError("Ingresa un número de identificación válido.");
+      return;
     }
-
-    if (!URL_BUSQUEDA || !URL_ENVIO) {
-        const estadoDiv = document.getElementById("estado-envio");
-        estadoDiv.innerText = "⚠️ Integración no configurada en esta copia pública.";
-        estadoDiv.style.color = "var(--text-color)";
-    }
-});
-
-const sanitizeInput = (str) => {
-    if (!str) return "";
-    return str.replace(/[&<>'"]/g, tag => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-    }[tag] || tag));
-};
-
-function ponerFechaActualColombia() {
-    const ahora = new Date();
-    const fechaColombia = new Date(ahora.toLocaleString("en-US", { timeZone: "America/Bogota" }));
-    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-
-    document.getElementById("txt_dia").innerText = String(fechaColombia.getDate()).padStart(2, "0");
-    document.getElementById("txt_mes").innerText = meses[fechaColombia.getMonth()];
-    document.getElementById("txt_anio").innerText = fechaColombia.getFullYear();
-}
-
-window.buscarColaborador = async () => {
-    const cedula = document.getElementById("cedula").value.trim();
-    if (!cedula) return;
-
-    const msg = document.getElementById("msg-colaborador");
-
-    if (!URL_BUSQUEDA) {
-        msg.innerText = "⚠️ Servicio de consulta no configurado.";
-        msg.style.color = "var(--text-color)";
-        return;
-    }
-
-    msg.innerText = "Consultando base de datos...";
-    msg.style.color = "var(--text-color)";
-
-    const urlSinCache = URL_BUSQUEDA + "&t=" + new Date().getTime();
 
     try {
-        const resp = await fetch(urlSinCache, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cedula: sanitizeInput(cedula) }),
-            signal: AbortSignal.timeout(8000)
-        });
+      btnBuscar.disabled = true;
+      btnBuscar.textContent = "Buscando...";
 
-        if (!resp.ok) throw new Error();
-        const data = await resp.json();
+      const respuesta = await fetchConTimeout(
+        `${window.APP_CONFIG.URL_BUSQUEDA}?identificacion=${encodeURIComponent(identificacion)}`,
+        { method: "GET" },
+        8000
+      );
 
-        if (data && data.nombre_colaborador) {
-            msg.innerText = "✅ Colaborador encontrado";
-            msg.style.color = "green";
-            document.getElementById("txt_nombre").innerText = sanitizeInput(data.nombre_colaborador);
-            document.getElementById("nombre_colaborador").value = sanitizeInput(data.nombre_colaborador);
-            document.getElementById("txt_cedula").innerText = sanitizeInput(cedula);
-        } else {
-            msg.innerText = "❌ Cédula no registrada";
-            msg.style.color = "red";
-            document.getElementById("txt_nombre").innerText = "";
-            document.getElementById("nombre_colaborador").value = "";
-            document.getElementById("txt_cedula").innerText = "";
-        }
-    } catch (err) {
-        msg.innerText = err.name === "TimeoutError" ? "❌ Tiempo de espera agotado" : "❌ Error de conexión";
-        msg.style.color = "red";
+      if (!respuesta.ok) {
+        throw new Error("No se encontró el colaborador.");
+      }
+
+      const datos = await respuesta.json();
+      inputNombre.value = sanitizarTexto(datos.nombre || "");
+    } catch (error) {
+      mostrarError(error.message || "No fue posible completar la búsqueda.");
+    } finally {
+      btnBuscar.disabled = false;
+      btnBuscar.textContent = "Buscar colaborador";
     }
-};
+  });
 
-document.getElementById("cedula").addEventListener("input", e => {
-    e.target.value = e.target.value.replace(/\D/g, "");
-});
+  // ---------- Envío del formulario ----------
+  form.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    ocultarMensajes();
 
-function setupCanvas(id) {
-    const c = document.getElementById(id);
-    const ctx = c.getContext("2d", { willReadFrequently: true });
-    let drawing = false;
-    let wasUsed = false;
-
-    const resize = () => {
-        c.width = c.offsetWidth;
-        c.height = 160;
-    };
-
-    window.addEventListener("resize", resize);
-    resize();
-
-    const getPos = (e) => {
-        const r = c.getBoundingClientRect();
-        const ev = e.touches ? e.touches[0] : e;
-        return { x: ev.clientX - r.left, y: ev.clientY - r.top };
-    };
-
-    const draw = (p1, p2) => {
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.strokeStyle = "rgba(10,10,10,0.95)";
-        ctx.lineWidth = 2.5;
-        ctx.lineCap = "round";
-        ctx.stroke();
-    };
-
-    let last = null;
-
-    const start = (e) => {
-        e.preventDefault();
-        drawing = true;
-        wasUsed = true;
-        last = getPos(e);
-        c.style.borderColor = "var(--ramo-blue-brand)";
-    };
-
-    const move = (e) => {
-        if (!drawing) return;
-        e.preventDefault();
-        const cur = getPos(e);
-        draw(last, cur);
-        last = cur;
-    };
-
-    const end = (e) => {
-        if (!drawing) return;
-        e.preventDefault();
-        drawing = false;
-    };
-
-    c.addEventListener("pointerdown", start);
-    c.addEventListener("pointermove", move);
-    c.addEventListener("pointerup", end);
-    c.addEventListener("pointercancel", end);
-    c.addEventListener("pointerout", end);
-
-    return {
-        c,
-        isSigned: () => wasUsed,
-        reset: () => {
-            wasUsed = false;
-            ctx.clearRect(0, 0, c.width, c.height);
-            c.style.borderColor = "#b5d5e5";
-        }
-    };
-}
-
-window.limpiarFirma = () => sigColab.reset();
-
-document.getElementById("formulario-descuento").addEventListener("submit", async e => {
-    e.preventDefault();
-
-    if (enviandoFormulario) return;
-
-    const estadoDiv = document.getElementById("estado-envio");
-
-    if (!URL_ENVIO) {
-        estadoDiv.innerText = "⚠️ Servicio de envío no configurado.";
-        estadoDiv.style.color = "var(--text-color)";
-        return;
-    }
-
-    if (!sigColab.isSigned()) {
-        alert("⚠️ La firma digital es obligatoria.");
-        return;
-    }
-
-    const btn = document.querySelector(".btn-principal");
-    btn.disabled = true;
-    enviandoFormulario = true;
-    estadoDiv.innerText = "Enviando autorización...";
-    estadoDiv.style.color = "var(--text-color)";
+    if (!validarFormulario()) return;
 
     const payload = {
-        cedula: sanitizeInput(document.getElementById("cedula").value),
-        nombre: sanitizeInput(document.getElementById("nombre_colaborador").value),
-        sap: sanitizeInput(document.getElementById("codigo_sap").value),
-        serial: sanitizeInput(document.getElementById("serial_equipo").value),
-        dia: document.getElementById("txt_dia").innerText,
-        mes: document.getElementById("txt_mes").innerText,
-        anio: document.getElementById("txt_anio").innerText,
-        firma: sigColab.c.toDataURL().split(",")[1]
+      identificacion: sanitizarTexto(inputIdentificacion.value),
+      nombre: sanitizarTexto(inputNombre.value),
+      codigoActivo: sanitizarTexto(inputCodigoActivo.value),
+      serial: sanitizarTexto(inputSerial.value),
+      fecha: inputFecha.value,
+      firma: canvas.toDataURL("image/png"),
     };
 
     try {
-        const r = await fetch(URL_ENVIO, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-            signal: AbortSignal.timeout(12000)
-        });
+      btnEnviar.disabled = true;
+      btnEnviar.textContent = "Enviando...";
 
-        if (r.ok) {
-            estadoDiv.innerText = "✅ ¡Autorización guardada exitosamente!";
-            estadoDiv.style.color = "green";
-            setTimeout(() => location.reload(), 3000);
-        } else {
-            throw new Error();
-        }
-    } catch (err) {
-        estadoDiv.innerText = err.name === "TimeoutError" ? "❌ La red está inestable. Intenta de nuevo." : "❌ Error de conexión al enviar.";
-        estadoDiv.style.color = "red";
-        btn.disabled = false;
-        enviandoFormulario = false;
+      const respuesta = await fetchConTimeout(
+        window.APP_CONFIG.URL_ENVIO,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+        10000
+      );
+
+      if (!respuesta.ok) {
+        throw new Error("El servicio de autorización no respondió correctamente.");
+      }
+
+      mostrarExito("Autorización enviada correctamente.");
+      form.reset();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      firmaVacia = true;
+      establecerFechaActual();
+    } catch (error) {
+      mostrarError(error.message || "No fue posible enviar la autorización.");
+    } finally {
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = "Enviar autorización";
     }
+  });
+
+  // ---------- Utilidades ----------
+  function validarFormulario() {
+    if (!inputIdentificacion.value.trim()) {
+      mostrarError("Ingresa el número de identificación.");
+      return false;
+    }
+    if (!inputNombre.value.trim()) {
+      mostrarError("Busca y confirma el colaborador antes de continuar.");
+      return false;
+    }
+    if (!inputCodigoActivo.value.trim()) {
+      mostrarError("Ingresa el código de activo.");
+      return false;
+    }
+    if (!inputSerial.value.trim()) {
+      mostrarError("Ingresa el serial del equipo.");
+      return false;
+    }
+    if (firmaVacia) {
+      mostrarError("La firma digital es obligatoria.");
+      return false;
+    }
+    return true;
+  }
+
+  function sanitizarTexto(texto) {
+    return String(texto)
+      .replace(/[<>]/g, "")
+      .trim();
+  }
+
+  async function fetchConTimeout(url, opciones, ms) {
+    const controlador = new AbortController();
+    const timeout = setTimeout(() => controlador.abort(), ms);
+    try {
+      return await fetch(url, { ...opciones, signal: controlador.signal });
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  function mostrarError(texto) {
+    mensajeError.textContent = texto;
+    mensajeError.hidden = false;
+  }
+
+  function mostrarExito(texto) {
+    mensajeExito.textContent = texto;
+    mensajeExito.hidden = false;
+  }
+
+  function ocultarMensajes() {
+    mensajeError.hidden = true;
+    mensajeExito.hidden = true;
+  }
 });

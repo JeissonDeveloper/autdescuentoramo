@@ -1,17 +1,3 @@
-# Sistema
-.DS_Store
-Thumbs.db
-
-# Editores
-.vscode/
-.idea/
-
-# Configuración y secretos locales
-.env
-.env.*
 config.js
-config.local.js
-secrets.*
-
-# Logs
+.env
 *.log

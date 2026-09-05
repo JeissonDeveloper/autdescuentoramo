@@ -1,6 +1,7 @@
-// Copia este archivo como `config.js` en tu entorno de despliegue.
-// Nunca subas `config.js` al repositorio público si contiene URLs firmadas o secretos.
+// Copia este archivo como config.js y define tus propios endpoints de prueba.
+// config.js está en .gitignore y nunca debe subirse al repositorio.
+
 window.APP_CONFIG = {
-    URL_BUSQUEDA: "URL_DEL_FLUJO_DE_BUSQUEDA",
-    URL_ENVIO: "URL_DEL_FLUJO_DE_ENVIO"
+  URL_BUSQUEDA: "https://tu-entorno.example.com/api/buscar-colaborador",
+  URL_ENVIO: "https://tu-entorno.example.com/api/enviar-autorizacion",
 };

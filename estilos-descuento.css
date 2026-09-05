@@ -1,232 +1,129 @@
 :root {
-    --ramo-blue-brand: #008dd2; 
-    --ramo-blue-dark: #0077b6; 
-    --text-color: #334155;
-    --border-color: #cbd5e1;
-    --bg-color: #f8fafc;
+  --color-primario: #1f4e5f;
+  --color-secundario: #2e8b8b;
+  --color-fondo: #f4f6f7;
+  --color-texto: #1c1c1c;
+  --color-borde: #cfd8dc;
+  --color-error: #b3261e;
+  --color-exito: #1e6b3f;
+  --radio-borde: 8px;
 }
 
-/* 1. Globales y Reset para evitar desbordes */
 * {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
 }
 
-.contenedor-principal {
-    width: 100%;
-    max-width: 500px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    overflow: hidden;
+.contenedor {
+  width: 100%;
+  max-width: 560px;
+  background: #ffffff;
+  border-radius: var(--radio-borde);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
 }
 
-/* 2. Header y Logo */
-.header-logo {
-    padding: 20px 0 10px 0;
-    text-align: center;
+.encabezado h1 {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+  color: var(--color-primario);
 }
 
-.logo-img {
-    max-height: 75px;
-    width: auto;
+.subtitulo {
+  margin-top: 0;
+  color: #5f6b6d;
+  font-size: 0.9rem;
 }
 
-.header-azul {
-    background-color: var(--ramo-blue-brand);
-    color: white;
-    padding: 20px;
-    text-align: center;
+fieldset {
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  margin-bottom: 1.25rem;
+  padding: 1rem;
 }
 
-.header-azul h1 {
-    margin: 0;
-    font-size: 1.4rem;
-    letter-spacing: 1px;
+legend {
+  font-weight: 600;
+  color: var(--color-primario);
+  padding: 0 0.5rem;
 }
-
-/* 3. Estructura del Formulario */
-form {
-    padding: 20px;
-}
-
-.seccion-header {
-    display: flex;
-    align-items: center;
-    background: #f1f5f9;
-    padding: 10px;
-    border-radius: 8px;
-    margin: 25px 0 15px 0;
-    font-weight: bold;
-    border-left: 4px solid var(--ramo-blue-brand);
-}
-
-.seccion-header .numero {
-    background: var(--ramo-blue-brand);
-    color: white;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    font-size: 0.8rem;
-}
-
-/* 4. Inputs y Botones */
-.input-group { margin-bottom: 15px; }
 
 label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    font-size: 0.9rem;
+  display: block;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
 }
 
 input[type="text"] {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 1rem;
-    box-sizing: border-box !important;
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  font-size: 0.95rem;
 }
 
-.input-group-search {
-    display: flex;
-    gap: 8px;
+input[readonly] {
+  background: #f0f2f3;
 }
 
-.btn-search {
-    background: var(--ramo-blue-brand);
-    color: white;
-    border: none;
-    padding: 0 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+.boton-primario,
+.boton-secundario {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.95rem;
+  margin-top: 0.75rem;
 }
 
-/* 5. Documento Legal (Optimizado Zebra) */
-.documento-legal {
-    background: #fff;
-    border: 1px solid #eee;
-    padding: 20px;
-    line-height: 1.6;
-    text-align: left; /* Clave para pantallas pequeñas */
-    font-size: 0.95rem;
-    border-radius: 8px;
+.boton-primario {
+  background: var(--color-primario);
+  color: #fff;
+  width: 100%;
 }
 
-.titulo-acta {
-    text-align: center;
-    font-size: 1.1rem;
-    color: var(--ramo-blue-brand);
-    margin-top: 0;
+.boton-primario:hover {
+  opacity: 0.92;
 }
 
-.espacio-blanco {
-    display: inline-block;
-    border-bottom: 1.5px solid var(--text-color);
-    min-width: 80px;
-    text-align: center;
-    padding: 0 5px;
-    margin: 0 3px;
+.boton-secundario {
+  background: #e7ecec;
+  color: var(--color-texto);
 }
 
-.espacio-largo { min-width: 150px; }
-
-.dato-resaltado {
-    color: var(--ramo-blue-brand);
-    font-weight: 800;
-}
-
-/* 6. Centrado de Cajas SAP/Serial */
-.cajas-internas {
-    max-width: 320px;
-    margin: 20px auto;
-    text-align: center;
-}
-
-.cajas-internas input {
-    text-align: center;
-}
-
-/* 7. Firma Digital */
-.canvas-container {
-    position: relative;
-    width: 100%;
-    border: 2px dashed #b5d5e5;
-    border-radius: 12px;
-    background: #fff;
-    margin-bottom: 20px;
+.boton-secundario:hover {
+  background: #dbe2e2;
 }
 
 canvas {
-    width: 100% !important;
-    height: 180px;
-    display: block;
-    touch-action: none;
+  width: 100%;
+  border: 1px dashed var(--color-borde);
+  border-radius: 6px;
+  touch-action: none;
+  background: #fff;
 }
 
-.btn-clear {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #475569;
+.acciones-firma {
+  display: flex;
+  justify-content: flex-end;
 }
 
-/* 8. Checkbox y Envío */
-.checkbox-container {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-    font-size: 0.85rem;
-    line-height: 1.4;
+.mensaje-error {
+  color: var(--color-error);
+  font-size: 0.9rem;
 }
 
-.btn-principal {
-    width: 100%;
-    background-color: var(--ramo-blue-brand);
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.mensaje-final {
-    text-align: center;
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-/* 9. Media Queries estricto Zebra */
-@media (max-width: 480px) {
-    body { padding: 10px; }
-    .header-azul h1 { font-size: 1.1rem; }
-    .documento-legal { font-size: 0.85rem; padding: 15px; }
-    .cajas-internas { max-width: 100%; padding: 0 10px; }
+.mensaje-exito {
+  color: var(--color-exito);
+  font-size: 0.9rem;
 }

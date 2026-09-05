@@ -1,22 +1,18 @@
-# Política de Seguridad
+# Seguridad
 
-Este repositorio representa una solución de automatización empresarial y puede integrarse con servicios externos.
+Este proyecto usa `config.js` (excluido del repositorio mediante `.gitignore`) para separar
+endpoints y credenciales del código fuente publicado.
 
-## Información sensible
+## Recomendaciones
 
-No deben publicarse en el código fuente:
+- Nunca subas URLs firmadas, tokens o credenciales directamente al código.
+- Usa siempre `config.example.js` como plantilla y `config.js` como archivo local, no versionado.
+- Si necesitas exponer este formulario en producción, considera una capa backend intermedia
+  para no exponer endpoints sensibles directamente al navegador.
+- Antes de hacer público cualquier repositorio, revisa el historial completo de commits
+  (no solo el estado actual del código) para confirmar que nunca se haya subido información sensible.
 
-- URLs firmadas o tokens de Power Automate.
-- Credenciales, claves API o secretos.
-- Datos personales de colaboradores.
-- Archivos de configuración con información interna.
+## Reportar un problema
 
-Los valores sensibles deben mantenerse fuera del repositorio público y rotarse inmediatamente si llegan a publicarse accidentalmente.
-
-## Reporte de problemas
-
-Si se detecta una vulnerabilidad o exposición accidental de información sensible, evita publicarla en un issue público. Corrige o revoca primero la credencial afectada y luego documenta el cambio de forma segura.
-
-## Nota de portafolio
-
-El código publicado debe utilizar datos de ejemplo o configuraciones no sensibles cuando se presente como demostración pública.
+Si encuentras un problema de seguridad relacionado con este proyecto de portafolio,
+puedes abrir un issue describiendo el hallazgo de forma general, sin incluir datos sensibles.
